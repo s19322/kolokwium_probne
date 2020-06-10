@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kolokwium_probne.Context;
 using kolokwium_probne.Models;
+using kolokwium_probne.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,7 @@ namespace kolokwium_probne.Controllers
         [HttpGet("orders/{Clientname}")]
         public IActionResult GetOrders(String Clientname)
         {
-            
+
             var idKlient = _dbcontext.BakeryClient.Where(e => e.nazwisko == Clientname).Select(e=>e.IdKlient);
 
             var listofALLOrders = from orders in _dbcontext.BakeryOrders
@@ -34,7 +35,7 @@ namespace kolokwium_probne.Controllers
                                   join prod in _dbcontext.BakeryProduct
                                   on prod_or.IdWyrobCukierniczy equals prod.IdWyrobCukierniczy
                                   where orders.IdKlient == idKlient.First()
-                                  select new { prod_or, orders } ;
+                                  select new { prod_or} ;
 
             return Ok(listofALLOrders.ToList());
         }
